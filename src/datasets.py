@@ -8,7 +8,7 @@ import numpy as np
 import random
 import pandas as pd
 from progressbar import *
-from utils import check_folder
+from .utils import check_folder
 
 
 IMG_SIZE = [160, 160]
