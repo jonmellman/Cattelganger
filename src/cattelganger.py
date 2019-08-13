@@ -31,24 +31,11 @@ def _crop_to_face(image, cascade_path):
 
 	x, y, w, h = bounding_boxes[0]
 
-	# w = max(SIZE, w)
-	# h = max(SIZE, h)
-
-	# x = x - ((SIZE - w2) / 2)
-	# y = y - ((SIZE - h2) / 2)
-
 	
 	crop_img = image[y:y+h, x:x+w]
 	resized_image = cv2.resize(crop_img, (SIZE, SIZE)) 
 
 	image_rgb = cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB)
-
-	# fig, ax = plt.subplots(1)
-	# ax.imshow(image_rgb)
-
-	# plt.xticks([])
-	# plt.yticks([])
-	# plt.show()
 
 	return image_rgb
 
