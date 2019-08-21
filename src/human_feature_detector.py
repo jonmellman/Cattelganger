@@ -15,13 +15,13 @@ rects = detector(image, 1)
 # define a dictionary that maps the indexes of the facial
 # landmarks to specific face regions
 FACIAL_LANDMARKS_IDXS = OrderedDict([
-	("mouth", (48, 68)),
-	("right_eyebrow", (17, 22)),
-	("left_eyebrow", (22, 27)),
-	("right_eye", (36, 42)),
-	("left_eye", (42, 48)),
-	("nose", (27, 35)),
-	("jaw", (0, 17))
+    ("mouth", (48, 68)),
+    ("right_eyebrow", (17, 22)),
+    ("left_eyebrow", (22, 27)),
+    ("right_eye", (36, 42)),
+    ("left_eye", (42, 48)),
+    ("nose", (27, 35)),
+    ("jaw", (0, 17))
 ])
 
 # Cat features are
@@ -29,18 +29,20 @@ FACIAL_LANDMARKS_IDXS = OrderedDict([
 
 FEATURES = ['jaw', 'left_eye', 'right_eye', 'nose']
 
+
 def compute_feature_averages(shape):
-	return np.concatenate([
-		np.mean(shape[slice(*FACIAL_LANDMARKS_IDXS[feature])], axis=0, keepdims=True)
-		for feature in FEATURES	
-	], axis=0).astype(np.int32)
-	
+    return np.concatenate([
+        np.mean(shape[slice(*FACIAL_LANDMARKS_IDXS[feature])],
+                axis=0, keepdims=True)
+        for feature in FEATURES
+    ], axis=0).astype(np.int32)
+
 
 if (len(rects) > 1):
-	raise Exception('Multiple faces detected!')
+    raise Exception('Multiple faces detected!')
 
 if (len(rects) < 1):
-	raise Exception('No faces detected!')
+    raise Exception('No faces detected!')
 
 rect = rects[0]
 
@@ -58,21 +60,22 @@ cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
 # show the face number
 cv2.putText(image, "Face #{}".format(1), (x - 10, y - 10),
-	cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
 # loop over the (x, y)-coordinates for the facial landmarks
 # and draw them on the image
 for (x, y) in shape:
-	cv2.circle(image, (x, y), 1, (0, 0, 255), -1)
+    cv2.circle(image, (x, y), 1, (0, 0, 255), -1)
 
 shape = compute_feature_averages(shape)
 
 for (x, y) in shape:
-	cv2.circle(image, (x, y), 5, (255, 0, 255), -1)
- 
+    cv2.circle(image, (x, y), 5, (255, 0, 255), -1)
+
 # show the output image with the face detections + facial landmarks
 plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-# plt.show()
+plt.axis('off')
+plt.show()
 
 
 # Need to scale all cat images to be same size
@@ -87,10 +90,11 @@ plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 #  Scale to set size
 #  Run feature detector
 #  Compare with all cat landmarks and return cat with minimum diff
-	# tf.norm(human_features - cat_features)
+# tf.norm(human_features - cat_features)
 
 
-cat_features = catfd.detect(input_image='../cat2.jpg', output_path=None, use_json=True, annotate_faces=False,
-           annotate_landmarks=False, face_color=None, landmark_color=None, save_chip=False)
+# cat_features = catfd.detect(input_image='../cat2.jpg', output_path=None, use_json=True, annotate_faces=False,
+#                             annotate_landmarks=False, face_color=None, landmark_color=None, save_chip=False)
 
-cat_landmarks = cat_features.landmarks
+# print(cat_features)
+# cat_landmarks = cat_features.landmarks

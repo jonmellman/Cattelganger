@@ -20,49 +20,51 @@ facenet = FaceNet(opt)
 
 
 def _crop_to_face(image, cascade_path):
-	SIZE = 160
-	
-	face_cascade = cv2.CascadeClassifier(cascade_path)
+    SIZE = 160
 
-	bounding_boxes = face_cascade.detectMultiScale(image, 1.25, 6)
+    face_cascade = cv2.CascadeClassifier(cascade_path)
 
-	if (len(bounding_boxes)) == 0:
-		raise Exception('No faces detected in input image!')
+    bounding_boxes = face_cascade.detectMultiScale(image, 1.25, 6)
 
-	x, y, w, h = bounding_boxes[0]
+    if (len(bounding_boxes)) == 0:
+        raise Exception('No faces detected in input image!')
 
-	
-	crop_img = image[y:y+h, x:x+w]
-	resized_image = cv2.resize(crop_img, (SIZE, SIZE)) 
+    x, y, w, h = bounding_boxes[0]
 
-	image_rgb = cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB)
 
-	return image_rgb
+    crop_img = image[y:y+h, x:x+w]
+    resized_image = cv2.resize(crop_img, (SIZE, SIZE))
+
+    image_rgb = cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB)
+
+    return image_rgb
 
 
 def crop_to_human_face(image):
-	return _crop_to_face(image, '../haarcascade_frontalface_default.xml')
+    return _crop_to_face(image, '../haarcascade_frontalface_default.xml')
+
 
 def crop_to_cat_face(image):
-	return _crop_to_face(image, '../haarcascade_frontalcatface.xml')
+    return _crop_to_face(image, '../haarcascade_frontalcatface.xml')
+
 
 def show_cat(index):
-	cat_photo_file = '../cat' + str((index.numpy()) + 1) + '.jpg'
+    cat_photo_file = '../cat' + str((index.numpy()) + 1) + '.jpg'
 
-	cat_photo = cv2.imread(cat_photo_file)
-	cat_photo = cv2.cvtColor(cat_photo, cv2.COLOR_BGR2RGB)
-	plt.xticks([])
-	plt.yticks([])
-	plt.imshow(cat_photo)
-	plt.show()
+    cat_photo = cv2.imread(cat_photo_file)
+    cat_photo = cv2.cvtColor(cat_photo, cv2.COLOR_BGR2RGB)
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(cat_photo)
+    plt.show()
 
 
 human_face = tf.image.convert_image_dtype(crop_to_human_face(cv2.imread('./vggface2/val/15169058.jpg')), tf.float32)
 
 cat_faces = tf.stack([
-	# tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat1.jpg')), tf.float32),
-	tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat2.jpg')), tf.float32),
-	tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat3.jpg')), tf.float32)
+    # tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat1.jpg')), tf.float32),
+    tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat2.jpg')), tf.float32),
+    tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat3.jpg')), tf.float32)
 ], axis=0)
 
 # cat_face = tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat3.jpg')), tf.float32)
@@ -79,7 +81,7 @@ show_cat(index)
 # print(distances)
 
 # for batch_id, (batch_images_validate, batch_labels_validate) in enumerate(val_datasets):
-# 	# batch_images_validate: [1, 160, 160, 3], dtype=float32
-# 	import pdb; pdb.set_trace()
-# 	prediction = facenet.model(batch_images_validate)
-# 	print(prediction)
+#     # batch_images_validate: [1, 160, 160, 3], dtype=float32
+#     import pdb; pdb.set_trace()
+#     prediction = facenet.model(batch_images_validate)
+#     print(prediction)
