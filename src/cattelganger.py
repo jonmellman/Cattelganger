@@ -9,12 +9,18 @@ from .facenet import FaceNet
 from .datasets import create_datasets_from_tfrecord
 import matplotlib.pyplot as plt
 
+# TODO: Make the human file location dynamic, and eventually read from camera.
+HUMAN_FACE_FILE_LOCATION = './vggface2/val/15169058.jpg'
+
+# TODO: Use a larger database instead of files.
+CAT_FACE_FILE_LOCATIONS = ['../cat2.jpg', '../cat3.jpg']
+
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model-name',type=str, default='Resnet50')
-parser.add_argument('--image-size',type=int, default=160)
-parser.add_argument('--num_classes',type=int, default=100)
-parser.add_argument('--embedding_size',type=int, default=512)
+parser.add_argument('--model-name', type=str, default='Resnet50')
+parser.add_argument('--image-size', type=int, default=160)
+parser.add_argument('--num_classes', type=int, default=100)
+parser.add_argument('--embedding_size', type=int, default=512)
 opt = parser.parse_args()
 facenet = FaceNet(opt)
 
@@ -30,7 +36,6 @@ def _crop_to_face(image, cascade_path):
         raise Exception('No faces detected in input image!')
 
     x, y, w, h = bounding_boxes[0]
-
 
     crop_img = image[y:y+h, x:x+w]
     resized_image = cv2.resize(crop_img, (SIZE, SIZE))
@@ -59,29 +64,20 @@ def show_cat(index):
     plt.show()
 
 
-human_face = tf.image.convert_image_dtype(crop_to_human_face(cv2.imread('./vggface2/val/15169058.jpg')), tf.float32)
+human_face = tf.image.convert_image_dtype(crop_to_human_face(
+    cv2.imread(HUMAN_FACE_FILE_LOCATION)), tf.float32)
+
 
 cat_faces = tf.stack([
-    # tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat1.jpg')), tf.float32),
-    tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat2.jpg')), tf.float32),
-    tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat3.jpg')), tf.float32)
+    # TODO: Refactor to use list comprehension
+    tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread(CAT_FACE_FILE_LOCATIONS[0])), tf.float32),
+    tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread(CAT_FACE_FILE_LOCATIONS[1])), tf.float32)
 ], axis=0)
-
-# cat_face = tf.image.convert_image_dtype(crop_to_cat_face(cv2.imread('../cat3.jpg')), tf.float32)
 
 human_face_prediction = facenet.model(human_face[None, ...])
 cat_face_predictions = facenet.model(cat_faces)
-distances = tf.norm(human_face_prediction - cat_face_predictions, axis=1, ord=2)
-index = tf.argmin(distances)
+distances = tf.norm(human_face_prediction -
+                    cat_face_predictions, axis=1, ord=2)
+cat_index = tf.argmin(distances)
 
-show_cat(index)
-
-
-# import pdb; pdb.set_trace()
-# print(distances)
-
-# for batch_id, (batch_images_validate, batch_labels_validate) in enumerate(val_datasets):
-#     # batch_images_validate: [1, 160, 160, 3], dtype=float32
-#     import pdb; pdb.set_trace()
-#     prediction = facenet.model(batch_images_validate)
-#     print(prediction)
+show_cat(cat_index)
