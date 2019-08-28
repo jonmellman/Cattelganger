@@ -1,6 +1,7 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: osx-64
+_tflow_select=2.3.0=mkl
 absl-py=0.7.1=py37_0
 asn1crypto=0.24.0=py37_0
 astor=0.8.0=py37_0
@@ -25,7 +26,6 @@ freetype=2.9.1=hb4e5f40_0
 gast=0.2.2=py37_0
 gettext=0.19.8.1=h15daf44_3
 glib=2.56.2=hd9629dc_0
-google-pasta=0.1.7=py_0
 graphite2=1.3.13=h2098e52_0
 grpcio=1.14.1=py37h9011c5e_0
 h5py=2.8.0=py37h878fce3_3
@@ -72,7 +72,7 @@ pcre=8.43=h0a44026_0
 pillow=6.1.0=py37hb68e598_0
 pip=19.2.2=py37_0
 pixman=0.38.0=h1de35cc_0
-progressbar=2.5=pypi_0
+progressbar=2.5=py_0
 protobuf=3.8.0=py37h0a44026_0
 py-opencv=3.4.2=py37h7c891bd_1
 pycatfd=1.0.0=dev_0
@@ -91,8 +91,10 @@ scipy=1.3.1=py37h1410ff5_0
 setuptools=41.0.1=py37_0
 six=1.12.0=py37_0
 sqlite=3.29.0=ha441bb4_0
-tb-nightly=1.14.0a20190603=pypi_0
-tensorflow=2.0.0b1=pypi_0
+tensorboard=1.14.0=py37h80053f4_0
+tensorflow=1.14.0=mkl_py37h085be34_0
+tensorflow-base=1.14.0=mkl_py37h5a24fda_0
+tensorflow-estimator=1.14.0=py_0
 termcolor=1.1.0=py37_1
 tf-estimator-nightly=1.14.0.dev2019060501=pypi_0
 tk=8.6.8=ha441bb4_0
