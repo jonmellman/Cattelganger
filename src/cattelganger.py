@@ -9,6 +9,8 @@ from .facenet import FaceNet
 from .datasets import create_datasets_from_tfrecord
 import matplotlib.pyplot as plt
 
+tf.enable_eager_execution()
+
 # TODO: Make the human file location dynamic, and eventually read from camera.
 HUMAN_FACE_FILE_LOCATION = './vggface2/val/15169058.jpg'
 
